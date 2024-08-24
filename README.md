@@ -5,13 +5,11 @@
 To develop a neural network regression model for the given dataset.
 
 ## THEORY
-
-Explain the problem statement
+First we can take the dataset based on one input value and some mathematical calculus output value.Next define the neural network model in three layers.First layer has six neurons and second layer has four neurons,third layer has one neuron.The neural network model takes the input and produces the actual output using regression.
 
 ## Neural Network Model
 
-Include the neural network model diagram.
-
+![1](https://github.com/user-attachments/assets/8ded9576-c9ed-40cb-bd76-7cf2508c7411)
 ## DESIGN STEPS
 
 ### STEP 1:
@@ -43,32 +41,74 @@ Plot the performance plot
 Evaluate the model with the testing data.
 
 ## PROGRAM
-### Name:
-### Register Number:
+```
+Name: KRISHNARAJ D
+Register Number: 212222230070
+```
 ```python
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential  # Space was missing between "models" and "import"
+from tensorflow.keras.layers import Dense
+from google.colab import auth
+import gspread
+from google.auth import default
 
-Include your code here
+auth.authenticate_user()
+creds,_ = default()
+gc = gspread.authorize (creds)
+worksheet = gc.open('DEEP LEARNING ').sheet1
+data = worksheet.get_all_values()
 
+dataset1 = pd.DataFrame(data[1:], columns=data[0])
+dataset1 = dataset1.astype({'X': 'float'})
+dataset1 = dataset1.astype({'Y': 'float'})
+dataset1.head()
 
+X = dataset1[['X']].values
+y = dataset1[['Y']].values
+#X
+X_train, X_test,y_train,y_test = train_test_split(X,y, test_size = 0.33, random_state = 33)
+Scaler = MinMaxScaler()
+Scaler.fit(X_train)
+
+X_train1 = Scaler.transform(X_train)
+ai_brain = Sequential ([
+Dense (8, activation = 'relu'),
+Dense (10, activation = 'relu'),
+Dense (1)
+])
+ai_brain.compile(optimizer = 'rmsprop', loss = 'mse')
+ai_brain.fit(X_train1, y_train, epochs =2000)
+
+loss_df= pd.DataFrame(ai_brain.history.history)
+loss_df.plot()
+
+X_test1=Scaler.transform(X_test)
+ai_brain.evaluate(X_test1, y_test)
+
+X_n1=[[7]]
+X_n1_1=Scaler.transform(X_n1)
+ai_brain.predict(X_n1_1)
 ```
 ## Dataset Information
+![DATASET](https://github.com/user-attachments/assets/5c9e9392-caf9-4854-966d-520dd88b624a)
 
-Include screenshot of the dataset
 
 ## OUTPUT
 
 ### Training Loss Vs Iteration Plot
 
-Include your plot here
+![Screenshot 2024-08-24 150754](https://github.com/user-attachments/assets/84ccb172-cb2d-4694-94ca-c43a30e3ca4e)
 
 ### Test Data Root Mean Squared Error
+![EPOCH](https://github.com/user-attachments/assets/65b620cb-c314-46bc-9259-a7fb8ae2bd7c)
 
-Find the test data root mean squared error
 
 ### New Sample Data Prediction
+![FINALOT](https://github.com/user-attachments/assets/362c8177-9338-43b0-af68-0c9b7cdc3028)
 
-Include your sample input and output here
 
 ## RESULT
-
-Include your result here
+Thus a Neural network for Regression model is Implemented.
